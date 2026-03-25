@@ -409,6 +409,18 @@ function ProjectCard({ project, index, isInView, onOpenDetails }: {
         </span>
         <h3 className="text-2xl font-bold tracking-tight">{project.title}</h3>
         <p className="text-muted-foreground leading-relaxed">{project.description}</p>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {project.technologies.slice(0, 3).map((tech: string) => (
+            <span key={tech} className="px-2 py-1 rounded-md bg-foreground/5 text-[8px] font-bold uppercase tracking-widest">
+              {tech}
+            </span>
+          ))}
+          {project.technologies.length > 3 && (
+            <span className="px-2 py-1 rounded-md bg-foreground/5 text-[8px] font-bold uppercase tracking-widest">
+              +{project.technologies.length - 3}
+            </span>
+          )}
+        </div>
       </div>
     </motion.div>
   );

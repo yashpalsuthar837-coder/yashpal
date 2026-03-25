@@ -1,39 +1,39 @@
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
-import { Layout, Server, Wrench, Code2, Palette, Database, Terminal, Globe, Cpu } from 'lucide-react';
+import { Layout, Server, Wrench, Code2, Palette, Database, Terminal, Globe, Cpu, Atom, FileJson, FileCode, Layers, Wind } from 'lucide-react';
 
 const skillCategories = [
   {
     title: 'Frontend',
     icon: <Layout className="text-red-600" size={24} />,
     skills: [
-      { name: 'React / Next.js', level: 95 },
-      { name: 'TypeScript', level: 90 },
-      { name: 'Tailwind CSS', level: 98 },
-      { name: 'Framer Motion', level: 92 },
-      { name: 'GSAP', level: 85 },
+      { name: 'React / Next.js', level: 95, icon: <Atom size={14} /> },
+      { name: 'JavaScript (ES6+)', level: 92, icon: <FileCode size={14} /> },
+      { name: 'HTML5 / CSS3', level: 98, icon: <Globe size={14} /> },
+      { name: 'TypeScript', level: 90, icon: <FileJson size={14} /> },
+      { name: 'Tailwind CSS', level: 98, icon: <Wind size={14} /> },
     ]
   },
   {
     title: 'Backend',
     icon: <Server className="text-red-600" size={24} />,
     skills: [
-      { name: 'Node.js / Express', level: 88 },
-      { name: 'Firebase / Firestore', level: 95 },
-      { name: 'PostgreSQL / MongoDB', level: 82 },
-      { name: 'RESTful APIs', level: 90 },
-      { name: 'Authentication (OAuth)', level: 85 },
+      { name: 'Node.js / Express', level: 88, icon: <Terminal size={14} /> },
+      { name: 'Firebase / Firestore', level: 95, icon: <Database size={14} /> },
+      { name: 'PostgreSQL / MongoDB', level: 82, icon: <Layers size={14} /> },
+      { name: 'RESTful APIs', level: 90, icon: <Globe size={14} /> },
+      { name: 'Authentication (OAuth)', level: 85, icon: <Cpu size={14} /> },
     ]
   },
   {
     title: 'Tools & Design',
     icon: <Wrench className="text-red-600" size={24} />,
     skills: [
-      { name: 'Git / GitHub', level: 95 },
-      { name: 'Docker', level: 75 },
-      { name: 'Figma / UI Design', level: 92 },
-      { name: 'Adobe Creative Suite', level: 90 },
-      { name: 'Vercel / AWS', level: 85 },
+      { name: 'Git / GitHub', level: 95, icon: <Code2 size={14} /> },
+      { name: 'Figma / UI Design', level: 92, icon: <Palette size={14} /> },
+      { name: 'Docker', level: 75, icon: <Layers size={14} /> },
+      { name: 'Vercel / AWS', level: 85, icon: <Globe size={14} /> },
+      { name: 'Adobe Creative Suite', level: 90, icon: <Palette size={14} /> },
     ]
   }
 ];
@@ -80,7 +80,10 @@ export default function Skills() {
                 {category.skills.map((skill, skillIndex) => (
                   <div key={skill.name} className="flex flex-col gap-2">
                     <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest">
-                      <span className="text-muted-foreground">{skill.name}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-red-600">{skill.icon}</span>
+                        <span className="text-muted-foreground">{skill.name}</span>
+                      </div>
                       <span className="text-red-600">{skill.level}%</span>
                     </div>
                     <div className="h-[2px] w-full bg-white/5 overflow-hidden rounded-full">

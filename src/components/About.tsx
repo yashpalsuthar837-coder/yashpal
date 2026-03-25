@@ -83,7 +83,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="text-lg md:text-xl text-muted-foreground leading-relaxed"
           >
-            My journey into technology wasn't just about learning syntax; it was about discovering a new way to solve problems. Born in Sahuwala, Rajasthan, I've always been the curious kid who wanted to know how things worked. 
+            My journey into technology wasn't just about learning syntax; it was about discovering a new way to solve problems. Born and raised in Rajasthan, I've always been the curious student who wanted to know how things worked behind the screen. 
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -92,7 +92,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="text-lg md:text-xl text-muted-foreground leading-relaxed"
           >
-            I completed my 10th grade in 2023 and my 12th in 2025. These years weren't just academic milestones; they were the foundation of my discipline and focus. While others saw textbooks, I saw logic waiting to be applied.
+            From my early school days in Rajasthan to my current studies, my passion for technology has only grown. I've spent countless hours experimenting with code, building small projects, and pushing my boundaries.
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -101,7 +101,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="text-lg md:text-xl text-muted-foreground leading-relaxed"
           >
-            Today, I don't just "write code." I build bridges between complex problems and elegant solutions. Whether it's a performance bottleneck or a UX friction point, I approach every challenge with a problem-solver's mindset and a developer's precision.
+            My ultimate goal is to become a world-class Full Stack Developer. I don't just "write code." I build bridges between complex problems and elegant solutions. Whether it's a performance bottleneck or a UX friction point, I approach every challenge with a problem-solver's mindset and a developer's precision.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

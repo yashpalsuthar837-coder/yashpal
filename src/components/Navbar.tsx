@@ -1,9 +1,10 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'motion/react';
-import { Menu, X, Sun, Moon, Eclipse } from 'lucide-react';
+import { Menu, X, Sun, Moon, Eclipse, Volume2, VolumeX } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/src/lib/utils';
 import { useTheme } from '../context/ThemeContext';
+import { useSound } from '../context/SoundContext';
 import { playSound } from '../lib/sounds';
 
 const navLinks = [
@@ -20,6 +21,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { theme, cycleTheme } = useTheme();
+  const { isMuted, toggleMute } = useSound();
   const location = useLocation();
   const { scrollY } = useScroll();
 
@@ -111,6 +113,42 @@ export default function Navbar() {
             </motion.div>
           ))}
           
+          {/* Sound Toggle Button */}
+          <motion.button
+            onClick={() => {
+              playSound('click');
+              triggerHaptic();
+              toggleMute();
+            }}
+            onMouseEnter={handleHover}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="relative w-10 h-10 flex items-center justify-center rounded-full glass"
+            title={isMuted ? "Unmute Sounds" : "Mute Sounds"}
+          >
+            <AnimatePresence mode="wait">
+              {isMuted ? (
+                <motion.div
+                  key="muted"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                >
+                  <VolumeX size={20} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="unmuted"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                >
+                  <Volume2 size={20} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
+
           {/* Theme Toggle Button */}
           <motion.button
             onClick={handleCycleTheme}
@@ -169,7 +207,17 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <div className="flex items-center gap-4 md:hidden">
+        <div className="flex items-center gap-2 md:hidden">
+          <motion.button
+            onClick={() => {
+              playSound('click');
+              triggerHaptic();
+              toggleMute();
+            }}
+            className="w-10 h-10 flex items-center justify-center rounded-full glass"
+          >
+            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </motion.button>
           <motion.button
             onClick={handleCycleTheme}
             className="w-10 h-10 flex items-center justify-center rounded-full glass"

@@ -10,6 +10,7 @@ import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/LoadingScreen';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { FirebaseProvider } from './context/FirebaseContext';
+import { SoundProvider } from './context/SoundContext';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -65,12 +66,14 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <FirebaseProvider>
-        <Router>
-          <ScrollToTop />
-          <AppContent />
-        </Router>
-      </FirebaseProvider>
+      <SoundProvider>
+        <FirebaseProvider>
+          <Router>
+            <ScrollToTop />
+            <AppContent />
+          </Router>
+        </FirebaseProvider>
+      </SoundProvider>
     </ThemeProvider>
   );
 }

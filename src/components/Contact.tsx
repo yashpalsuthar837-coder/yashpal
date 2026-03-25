@@ -2,6 +2,7 @@ import { motion, useInView, AnimatePresence } from 'motion/react';
 import { useRef, useState, type FormEvent } from 'react';
 import { Send, Mail, Github, Linkedin, MessageCircle, CheckCircle2, AlertCircle } from 'lucide-react';
 import { db, collection, addDoc, handleFirestoreError, OperationType } from '../lib/firebase';
+import { playSound } from '../lib/sounds';
 
 export default function Contact() {
   const ref = useRef(null);
@@ -18,6 +19,7 @@ export default function Contact() {
         ...formState,
         createdAt: new Date().toISOString(),
       });
+      playSound('success');
       setStatus('success');
       setFormState({ name: '', email: '', message: '' });
       setTimeout(() => setStatus('idle'), 5000);

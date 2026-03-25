@@ -102,8 +102,8 @@ export default function Hero() {
           transition={{ duration: 1.5, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-5xl md:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]"
         >
-          Turning Complex Problems <br /> 
-          <span className="text-red-600">Into Elegant Code.</span>
+          I build modern, fast <br /> 
+          <span className="text-red-600">& scalable web applications.</span>
         </motion.h1>
 
         <motion.p
@@ -112,8 +112,8 @@ export default function Hero() {
           transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-lg md:text-xl font-light text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-12"
         >
-          I build high-performance web applications that solve real-world challenges. 
-          Focused on creating seamless user experiences through clean architecture and modern design.
+          Hi, I'm Yashpal, a tech enthusiast from Rajasthan. 
+          I specialize in creating high-performance digital experiences that solve real-world problems.
         </motion.p>
 
         <motion.div
@@ -131,12 +131,12 @@ export default function Hero() {
             View Projects
           </motion.a>
           <motion.a
-            href="#resume"
+            href="#contact"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 rounded-full glass border border-white/10 text-foreground font-bold uppercase tracking-widest text-xs hover:bg-white/5 transition-all"
           >
-            Download Resume
+            Hire Me
           </motion.a>
         </motion.div>
       </motion.div>
