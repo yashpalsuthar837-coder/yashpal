@@ -7,6 +7,9 @@
       "properties": {
         "title": { "type": "string" },
         "description": { "type": "string" },
+        "problemStatement": { "type": "string" },
+        "solution": { "type": "string" },
+        "features": { "type": "array", "items": { "type": "string" } },
         "image": { "type": "string" },
         "tags": { "type": "array", "items": { "type": "string" } },
         "link": { "type": "string" },
@@ -14,7 +17,7 @@
         "category": { "type": "string" },
         "order": { "type": "integer" }
       },
-      "required": ["title", "description", "image", "tags", "category"]
+      "required": ["title", "description", "problemStatement", "solution", "image", "tags", "category"]
     },
     "blogPost": {
       "title": "Blog Post",

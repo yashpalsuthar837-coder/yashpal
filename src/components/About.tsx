@@ -74,7 +74,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="text-4xl md:text-6xl font-bold tracking-tighter"
           >
-            About Me
+            The Story Behind <br /> <span className="text-red-600">The Code.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -83,7 +83,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="text-lg md:text-xl text-muted-foreground leading-relaxed"
           >
-            I am Yashpal, a passionate and motivated individual from Sahuwala, Rajasthan, born on 14 February 2007. I completed my secondary education in 2023 and higher secondary education in 2025. I have a keen interest in the field of technology and continuously explore new advancements in digital tools and systems.
+            My journey into technology wasn't just about learning syntax; it was about discovering a new way to solve problems. Born in Sahuwala, Rajasthan, I've always been the curious kid who wanted to know how things worked. 
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -92,31 +92,31 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="text-lg md:text-xl text-muted-foreground leading-relaxed"
           >
-            I am driven by curiosity and a desire to learn, which helps me adapt to new challenges and opportunities. I enjoy working on tech-related ideas and improving my skills step by step. My goal is to build a strong career in the technology field and contribute to meaningful innovations that can benefit society.
+            I completed my 10th grade in 2023 and my 12th in 2025. These years weren't just academic milestones; they were the foundation of my discipline and focus. While others saw textbooks, I saw logic waiting to be applied.
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-lg md:text-xl text-muted-foreground leading-relaxed italic"
+            className="text-lg md:text-xl text-muted-foreground leading-relaxed"
           >
-            "I consider myself disciplined, focused, and committed to personal and professional growth."
+            Today, I don't just "write code." I build bridges between complex problems and elegant solutions. Whether it's a performance bottleneck or a UX friction point, I approach every challenge with a problem-solver's mindset and a developer's precision.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
-            className="flex gap-4 pt-8 border-t border-foreground/10"
+            className="flex gap-8 pt-8 border-t border-foreground/10"
           >
             <div className="flex flex-col group">
-              <span className="text-4xl font-bold group-hover:text-[#FF6321] transition-colors">2+</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">Years Experience</span>
+              <span className="text-4xl font-bold group-hover:text-red-600 transition-colors">2023</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">10th Grade</span>
             </div>
-            <div className="w-[1px] h-12 bg-foreground/10 mx-6" />
+            <div className="w-[1px] h-12 bg-foreground/10" />
             <div className="flex flex-col group">
-              <span className="text-4xl font-bold group-hover:text-[#FFD700] transition-colors">20+</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">Projects Completed</span>
+              <span className="text-4xl font-bold group-hover:text-red-600 transition-colors">2025</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">12th Grade</span>
             </div>
           </motion.div>
         </div>

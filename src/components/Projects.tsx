@@ -9,8 +9,15 @@ const localProjects = [
     title: 'Vibrant Digital',
     category: 'Web Development',
     image: 'https://picsum.photos/seed/project1/800/600',
-    description: 'A modern landing page for a creative agency with smooth scroll animations.',
-    longDescription: 'Vibrant Digital is a high-performance landing page designed to showcase the creative prowess of a digital agency. It features complex GSAP animations, a custom cursor, and a highly responsive layout that adapts perfectly to all screen sizes.',
+    description: 'A high-performance landing page for a creative agency.',
+    problemStatement: 'The client needed a way to stand out in a crowded digital agency market where most websites felt static and generic.',
+    solution: 'I built a highly interactive experience using GSAP and Framer Motion that guides the user through the agency\'s story with fluid motion.',
+    features: [
+      'Custom GSAP scroll animations',
+      'Interactive 3D elements',
+      'Performance-optimized asset loading',
+      'Dynamic content management'
+    ],
     technologies: ['React', 'GSAP', 'Tailwind CSS', 'Framer Motion'],
     role: 'Lead Developer',
     date: 'Jan 2024',
@@ -21,35 +28,18 @@ const localProjects = [
     title: 'Luxe Brand Identity',
     category: 'Branding',
     image: 'https://picsum.photos/seed/project2/800/600',
-    description: 'Minimalist brand identity design for a luxury fashion label.',
-    longDescription: 'This project involved creating a complete brand identity for "Luxe", a high-end fashion label. The goal was to convey elegance and exclusivity through minimalist design, a sophisticated color palette, and bespoke typography.',
+    description: 'Minimalist brand identity for a luxury fashion label.',
+    problemStatement: 'A new luxury brand needed an identity that felt established yet modern, appealing to a younger demographic without losing prestige.',
+    solution: 'Developed a visual language based on "Quiet Luxury," focusing on bespoke typography and a sophisticated, muted color palette.',
+    features: [
+      'Custom logo design',
+      'Brand guidelines documentation',
+      'Social media asset kit',
+      'Packaging design concepts'
+    ],
     technologies: ['Adobe Illustrator', 'Photoshop', 'Figma'],
     role: 'Brand Designer',
     date: 'Nov 2023',
-    link: '#',
-    github: '#',
-  },
-  {
-    title: 'Zen UI Kit',
-    category: 'UI/UX Design',
-    image: 'https://picsum.photos/seed/project3/800/600',
-    description: 'A comprehensive UI kit for meditation and wellness apps.',
-    longDescription: 'Zen UI Kit is a meticulously crafted set of components and screens designed specifically for the wellness industry. It focuses on accessibility, calm aesthetics, and intuitive user flows to enhance the meditation experience.',
-    technologies: ['Figma', 'React Native', 'Styled Components'],
-    role: 'UI/UX Designer',
-    date: 'Aug 2023',
-    link: '#',
-    github: '#',
-  },
-  {
-    title: 'Motion Graphics Showreel',
-    category: 'Motion Graphics',
-    image: 'https://picsum.photos/seed/project4/800/600',
-    description: 'A collection of dynamic motion graphics and visual effects.',
-    longDescription: 'This showreel highlights my expertise in motion design, featuring a variety of techniques from 2D character animation to complex 3D particle systems. Each piece demonstrates a strong sense of timing, rhythm, and visual storytelling.',
-    technologies: ['After Effects', 'Cinema 4D', 'Premiere Pro'],
-    role: 'Motion Designer',
-    date: 'May 2023',
     link: '#',
     github: '#',
   },
@@ -129,23 +119,29 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-wrap gap-4 mb-16"
+          className="flex flex-col gap-6 mb-16"
         >
-          {categories.map((category) => (
-            <motion.button
-              key={category}
-              onClick={() => handleFilterChange(category)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${
-                activeFilter === category 
-                  ? 'bg-foreground text-background border-foreground shadow-[0_0_20px_rgba(255,99,33,0.3)]' 
-                  : 'glass border-foreground/10 hover:border-foreground/30'
-              }`}
-            >
-              {category}
-            </motion.button>
-          ))}
+          <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-red-600/60">
+            <Filter size={14} />
+            <span>Filter by Category</span>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {categories.map((category) => (
+              <motion.button
+                key={category}
+                onClick={() => handleFilterChange(category)}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-8 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all duration-500 border ${
+                  activeFilter === category 
+                    ? 'bg-red-600 text-white border-red-600 shadow-[0_10px_30px_rgba(220,38,38,0.3)]' 
+                    : 'glass border-white/5 hover:border-red-600/30 text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {category}
+              </motion.button>
+            ))}
+          </div>
         </motion.div>
 
         <motion.div 
@@ -211,13 +207,35 @@ export default function Projects() {
                   
                   <div className="space-y-8">
                     <div>
-                      <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
-                        <Info size={14} /> Overview
+                      <h4 className="text-sm font-bold uppercase tracking-widest text-red-600 mb-3 flex items-center gap-2">
+                        <Info size={14} /> The Problem
                       </h4>
                       <p className="text-muted-foreground leading-relaxed">
-                        {selectedProject.longDescription}
+                        {selectedProject.problemStatement}
                       </p>
                     </div>
+
+                    <div>
+                      <h4 className="text-sm font-bold uppercase tracking-widest text-red-600 mb-3 flex items-center gap-2">
+                        <Code size={14} /> The Solution
+                      </h4>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {selectedProject.solution}
+                      </p>
+                    </div>
+
+                    {selectedProject.features && (
+                      <div>
+                        <h4 className="text-sm font-bold uppercase tracking-widest text-red-600 mb-3 flex items-center gap-2">
+                          <Filter size={14} /> Key Features
+                        </h4>
+                        <ul className="list-disc list-inside text-muted-foreground space-y-2">
+                          {selectedProject.features.map((feature: string, i: number) => (
+                            <li key={i}>{feature}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
                     <div className="grid grid-cols-2 gap-6">
                       <div>
@@ -239,7 +257,7 @@ export default function Projects() {
                         <Code size={14} /> Technologies
                       </h4>
                       <div className="flex flex-wrap gap-2">
-                        {selectedProject.technologies.map((tech) => (
+                        {selectedProject.technologies.map((tech: string) => (
                           <span key={tech} className="px-3 py-1 rounded-full bg-foreground/5 text-[10px] font-bold uppercase tracking-widest">
                             {tech}
                           </span>

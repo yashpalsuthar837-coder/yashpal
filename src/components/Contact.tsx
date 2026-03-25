@@ -1,133 +1,159 @@
-import { motion, useInView } from 'motion/react';
+import { motion, useInView, AnimatePresence } from 'motion/react';
 import { useRef, useState, type FormEvent } from 'react';
-import { Send, Mail, MapPin, Phone, Instagram } from 'lucide-react';
+import { Send, Mail, Github, Linkedin, MessageCircle, CheckCircle2, AlertCircle } from 'lucide-react';
+import { db, collection, addDoc, handleFirestoreError, OperationType } from '../lib/firebase';
 
 export default function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted:', formState);
-    alert('Thank you for your message! I will get back to you soon.');
-    setFormState({ name: '', email: '', message: '' });
+    setStatus('loading');
+    
+    try {
+      await addDoc(collection(db, 'messages'), {
+        ...formState,
+        createdAt: new Date().toISOString(),
+      });
+      setStatus('success');
+      setFormState({ name: '', email: '', message: '' });
+      setTimeout(() => setStatus('idle'), 5000);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
   };
 
   return (
-    <section id="contact" className="py-24 md:py-48 px-6 md:px-12 bg-background">
-      <div className="max-w-7xl mx-auto">
+    <section id="contact" className="py-24 md:py-48 px-6 md:px-12 bg-background relative overflow-hidden">
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-24 text-center"
+          className="mb-24"
         >
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6">Get in Touch</h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Have a project in mind or just want to say hello? I'd love to hear from you.
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6">Let's Build <br /> <span className="text-red-600">Something Great.</span></h2>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+            I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
           </p>
         </motion.div>
 
-        <div ref={ref} className="grid md:grid-cols-2 gap-12 md:gap-24">
+        <div ref={ref} className="grid lg:grid-cols-2 gap-12 lg:gap-24">
           <div className="flex flex-col gap-12">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col gap-8"
+              className="grid sm:grid-cols-2 gap-6"
             >
-              <a href="mailto:yashpalsuthar349@gmail.com" className="flex items-center gap-6 group">
-                <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300">
-                  <Mail size={24} />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-1">Email</span>
-                  <span className="text-xl font-bold tracking-tight">yashpalsuthar349@gmail.com</span>
-                </div>
+              <a href="mailto:yashpalsuthar349@gmail.com" className="p-8 rounded-3xl glass border border-white/5 hover:border-red-600/30 transition-all group">
+                <Mail className="text-red-600 mb-6 group-hover:scale-110 transition-transform" size={32} />
+                <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">Email</h3>
+                <p className="font-bold truncate">yashpalsuthar349@gmail.com</p>
               </a>
-              <a href="tel:9351830130" className="flex items-center gap-6 group">
-                <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300">
-                  <Phone size={24} />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-1">Phone</span>
-                  <span className="text-xl font-bold tracking-tight">9351830130</span>
-                </div>
+              
+              <a href="https://wa.me/919351830130" target="_blank" rel="noopener noreferrer" className="p-8 rounded-3xl glass border border-white/5 hover:border-red-600/30 transition-all group">
+                <MessageCircle className="text-red-600 mb-6 group-hover:scale-110 transition-transform" size={32} />
+                <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">WhatsApp</h3>
+                <p className="font-bold">+91 93518 30130</p>
               </a>
-              <a href="https://instagram.com/yasxpal" target="_blank" rel="noopener noreferrer" className="flex items-center gap-6 group">
-                <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300">
-                  <Instagram size={24} />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-1">Instagram</span>
-                  <span className="text-xl font-bold tracking-tight">@yasxpal</span>
-                </div>
+
+              <a href="https://github.com/yashpalsuthar837-coder" target="_blank" rel="noopener noreferrer" className="p-8 rounded-3xl glass border border-white/5 hover:border-red-600/30 transition-all group">
+                <Github className="text-red-600 mb-6 group-hover:scale-110 transition-transform" size={32} />
+                <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">GitHub</h3>
+                <p className="font-bold">yashpalsuthar837-coder</p>
               </a>
-              <div className="flex items-center gap-6 group">
-                <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300">
-                  <MapPin size={24} />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-1">Location</span>
-                  <span className="text-xl font-bold tracking-tight">Rajasthan, India</span>
-                </div>
-              </div>
+
+              <a href="https://linkedin.com/in/yashpal-suthar" target="_blank" rel="noopener noreferrer" className="p-8 rounded-3xl glass border border-white/5 hover:border-red-600/30 transition-all group">
+                <Linkedin className="text-red-600 mb-6 group-hover:scale-110 transition-transform" size={32} />
+                <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">LinkedIn</h3>
+                <p className="font-bold">Yashpal suthar</p>
+              </a>
             </motion.div>
           </div>
 
-          <motion.form
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-8"
+            className="p-8 md:p-12 rounded-[2.5rem] glass border border-white/10"
           >
-            <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="text-xs uppercase tracking-widest text-muted-foreground font-medium ml-1">Name</label>
-              <input
-                type="text"
-                id="name"
-                required
-                value={formState.name}
-                onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                className="w-full px-6 py-4 rounded-2xl glass focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300"
-                placeholder="Your Name"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground font-medium ml-1">Email</label>
-              <input
-                type="email"
-                id="email"
-                required
-                value={formState.email}
-                onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                className="w-full px-6 py-4 rounded-2xl glass focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300"
-                placeholder="Your Email"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="message" className="text-xs uppercase tracking-widest text-muted-foreground font-medium ml-1">Message</label>
-              <textarea
-                id="message"
-                required
-                rows={5}
-                value={formState.message}
-                onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                className="w-full px-6 py-4 rounded-2xl glass focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300 resize-none"
-                placeholder="Your Message"
-              />
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full py-5 rounded-2xl bg-white text-black font-bold tracking-widest uppercase flex items-center justify-center gap-3 hover:bg-white/90 transition-all duration-300"
-            >
-              Send Message <Send size={18} />
-            </motion.button>
-          </motion.form>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-bold ml-1">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={formState.name}
+                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                  className="w-full px-6 py-4 rounded-2xl glass border border-white/5 focus:border-red-600/50 focus:outline-none transition-all"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-bold ml-1">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={formState.email}
+                  onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                  className="w-full px-6 py-4 rounded-2xl glass border border-white/5 focus:border-red-600/50 focus:outline-none transition-all"
+                  placeholder="john@example.com"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-bold ml-1">Your Message</label>
+                <textarea
+                  required
+                  rows={4}
+                  value={formState.message}
+                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                  className="w-full px-6 py-4 rounded-2xl glass border border-white/5 focus:border-red-600/50 focus:outline-none transition-all resize-none"
+                  placeholder="Tell me about your project..."
+                />
+              </div>
+
+              <motion.button
+                disabled={status === 'loading'}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`w-full py-5 rounded-2xl font-bold tracking-widest uppercase flex items-center justify-center gap-3 transition-all ${
+                  status === 'loading' ? 'bg-muted text-muted-foreground' : 'bg-red-600 text-white shadow-[0_0_30px_rgba(220,38,38,0.3)]'
+                }`}
+              >
+                {status === 'loading' ? 'Sending...' : 'Send Message'}
+                <Send size={18} />
+              </motion.button>
+
+              <AnimatePresence>
+                {status === 'success' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center gap-2 text-green-500 text-sm font-medium justify-center"
+                  >
+                    <CheckCircle2 size={16} /> Message sent successfully!
+                  </motion.div>
+                )}
+                {status === 'error' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center gap-2 text-red-500 text-sm font-medium justify-center"
+                  >
+                    <AlertCircle size={16} /> Something went wrong. Please try again.
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </form>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -1,41 +1,38 @@
 import { motion } from 'motion/react';
-import { Instagram, Twitter, Linkedin, Github } from 'lucide-react';
-
-const socialLinks = [
-  { icon: Instagram, href: 'https://instagram.com/yasxpal' },
-  { icon: Twitter, href: '#' },
-  { icon: Linkedin, href: '#' },
-  { icon: Github, href: '#' },
-];
+import { Github, Linkedin, MessageCircle, Mail } from 'lucide-react';
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="py-12 md:py-24 px-6 md:px-12 bg-background border-t border-border">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-        <div className="flex flex-col gap-4 text-center md:text-left">
-          <h2 className="text-2xl font-bold tracking-tighter">YASHPAL</h2>
-          <p className="text-sm text-muted-foreground max-w-xs">
-            Crafting premium digital experiences with precision and passion.
-          </p>
+    <footer className="py-12 px-6 md:px-12 border-t border-white/5 bg-background">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="flex flex-col gap-2"
+        >
+          <span className="text-2xl font-bold tracking-tighter">Yashpal<span className="text-red-600">.</span></span>
+          <p className="text-sm text-muted-foreground">© {currentYear} Yashpal. All rights reserved.</p>
+        </motion.div>
+
+        <div className="flex items-center gap-6">
+          <a href="https://github.com/yashpalsuthar837-coder" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-red-600 transition-colors">
+            <Github size={20} />
+          </a>
+          <a href="https://linkedin.com/in/yashpal-suthar" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-red-600 transition-colors">
+            <Linkedin size={20} />
+          </a>
+          <a href="https://wa.me/919351830130" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-red-600 transition-colors">
+            <MessageCircle size={20} />
+          </a>
+          <a href="mailto:yashpalsuthar349@gmail.com" className="text-muted-foreground hover:text-red-600 transition-colors">
+            <Mail size={20} />
+          </a>
         </div>
 
-        <div className="flex gap-6">
-          {socialLinks.map((social, index) => (
-            <motion.a
-              key={index}
-              href={social.href}
-              whileHover={{ y: -5, scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="w-12 h-12 rounded-full glass flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <social.icon size={20} />
-            </motion.a>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-2 text-center md:text-right">
-          <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">© 2026 Yashpal Suthar</span>
-          <span className="text-xs text-muted-foreground/50">All rights reserved.</span>
+        <div className="text-sm text-muted-foreground font-medium">
+          Designed & Built with <span className="text-red-600">❤️</span> by Yashpal
         </div>
       </div>
     </footer>
