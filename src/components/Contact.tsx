@@ -16,7 +16,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 md:py-48 px-6 md:px-12 bg-black">
+    <section id="contact" className="py-24 md:py-48 px-6 md:px-12 bg-background">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -25,7 +25,7 @@ export default function Contact() {
           className="mb-24 text-center"
         >
           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6">Get in Touch</h2>
-          <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Have a project in mind or just want to say hello? I'd love to hear from you.
           </p>
         </motion.div>
@@ -43,7 +43,7 @@ export default function Contact() {
                   <Mail size={24} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-widest text-muted font-medium mb-1">Email</span>
+                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-1">Email</span>
                   <span className="text-xl font-bold tracking-tight">yashpalsuthar349@gmail.com</span>
                 </div>
               </a>
@@ -52,7 +52,7 @@ export default function Contact() {
                   <Phone size={24} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-widest text-muted font-medium mb-1">Phone</span>
+                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-1">Phone</span>
                   <span className="text-xl font-bold tracking-tight">9351830130</span>
                 </div>
               </a>
@@ -61,7 +61,7 @@ export default function Contact() {
                   <Instagram size={24} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-widest text-muted font-medium mb-1">Instagram</span>
+                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-1">Instagram</span>
                   <span className="text-xl font-bold tracking-tight">@yasxpal</span>
                 </div>
               </a>
@@ -70,7 +70,7 @@ export default function Contact() {
                   <MapPin size={24} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-widest text-muted font-medium mb-1">Location</span>
+                  <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-1">Location</span>
                   <span className="text-xl font-bold tracking-tight">Rajasthan, India</span>
                 </div>
               </div>
@@ -85,7 +85,7 @@ export default function Contact() {
             className="flex flex-col gap-8"
           >
             <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="text-xs uppercase tracking-widest text-muted font-medium ml-1">Name</label>
+              <label htmlFor="name" className="text-xs uppercase tracking-widest text-muted-foreground font-medium ml-1">Name</label>
               <input
                 type="text"
                 id="name"
@@ -97,7 +97,7 @@ export default function Contact() {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted font-medium ml-1">Email</label>
+              <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground font-medium ml-1">Email</label>
               <input
                 type="email"
                 id="email"
@@ -109,7 +109,7 @@ export default function Contact() {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="message" className="text-xs uppercase tracking-widest text-muted font-medium ml-1">Message</label>
+              <label htmlFor="message" className="text-xs uppercase tracking-widest text-muted-foreground font-medium ml-1">Message</label>
               <textarea
                 id="message"
                 required

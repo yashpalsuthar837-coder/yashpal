@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "project": {
+      "title": "Project",
+      "description": "A portfolio project",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "image": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "link": { "type": "string" },
+        "github": { "type": "string" },
+        "category": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["title", "description", "image", "tags", "category"]
+    },
+    "blogPost": {
+      "title": "Blog Post",
+      "description": "A blog post",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "excerpt": { "type": "string" },
+        "content": { "type": "string" },
+        "date": { "type": "string" },
+        "readTime": { "type": "string" },
+        "image": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "author": { "type": "string" },
+        "slug": { "type": "string" }
+      },
+      "required": ["title", "content", "date", "slug"]
+    },
+    "message": {
+      "title": "Message",
+      "description": "A contact message",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "subject": { "type": "string" },
+        "message": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "message", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/projects/{projectId}": {
+      "schema": "project",
+      "description": "Collection of projects"
+    },
+    "/blogPosts/{postId}": {
+      "schema": "blogPost",
+      "description": "Collection of blog posts"
+    },
+    "/messages/{messageId}": {
+      "schema": "message",
+      "description": "Collection of contact messages"
+    }
+  }
+}

@@ -8,7 +8,7 @@ export default function Blog() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="blog" className="py-24 md:py-48 px-6 md:px-12 bg-black min-h-screen">
+    <section id="blog" className="py-24 md:py-48 px-6 md:px-12 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -17,7 +17,7 @@ export default function Blog() {
           className="mb-24 text-center"
         >
           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6">Articles & Insights</h2>
-          <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Thoughts on design, technology, and the future of the web.
           </p>
         </motion.div>
@@ -44,16 +44,16 @@ export default function Blog() {
               <div className="flex flex-col gap-3">
                 <div className="flex gap-2">
                   {post.tags.map((tag) => (
-                    <span key={tag} className="text-[10px] uppercase tracking-widest text-muted font-bold border border-white/10 px-2 py-1 rounded-full">
+                    <span key={tag} className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold border border-foreground/10 px-2 py-1 rounded-full">
                       {tag}
                     </span>
                   ))}
                 </div>
                 <Link to={`/blog/${post.id}`}>
-                  <h3 className="text-2xl font-bold tracking-tight group-hover:text-white/80 transition-colors">{post.title}</h3>
+                  <h3 className="text-2xl font-bold tracking-tight group-hover:text-foreground/80 transition-colors">{post.title}</h3>
                 </Link>
-                <span className="text-xs text-muted font-medium">{post.date}</span>
-                <p className="text-muted leading-relaxed line-clamp-3">{post.excerpt}</p>
+                <span className="text-xs text-muted-foreground font-medium">{post.date}</span>
+                <p className="text-muted-foreground leading-relaxed line-clamp-3">{post.excerpt}</p>
                 <Link
                   to={`/blog/${post.id}`}
                   className="text-sm font-bold uppercase tracking-widest mt-2 flex items-center gap-2 group-hover:gap-4 transition-all duration-300"

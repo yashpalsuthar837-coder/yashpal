@@ -20,9 +20,9 @@ export default function BlogPost() {
 
   if (!post) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-6">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
         <h1 className="text-4xl font-bold mb-6">Post Not Found</h1>
-        <Link to="/blog" className="px-8 py-4 rounded-full glass font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300">
+        <Link to="/blog" className="px-8 py-4 rounded-full glass font-bold uppercase tracking-widest hover:bg-foreground hover:text-background transition-all duration-300">
           Back to Blog
         </Link>
       </div>
@@ -35,7 +35,7 @@ export default function BlogPost() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="bg-black min-h-screen text-white"
+      className="bg-background min-h-screen text-foreground"
       ref={containerRef}
     >
       {/* Hero Section */}
@@ -50,7 +50,7 @@ export default function BlogPost() {
             className="w-full h-full object-cover grayscale opacity-40"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" />
         </motion.div>
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
@@ -60,7 +60,7 @@ export default function BlogPost() {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="flex items-center justify-center gap-4 mb-8"
           >
-            <Link to="/blog" className="text-sm font-bold uppercase tracking-widest text-muted hover:text-white transition-colors flex items-center gap-2">
+            <Link to="/blog" className="text-sm font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
               <ArrowLeft size={16} /> Back to Blog
             </Link>
           </motion.div>
@@ -76,7 +76,7 @@ export default function BlogPost() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center justify-center gap-6 text-muted"
+            className="flex flex-wrap items-center justify-center gap-6 text-muted-foreground"
           >
             <div className="flex items-center gap-2">
               <Calendar size={16} />
@@ -86,7 +86,7 @@ export default function BlogPost() {
               <Tag size={16} />
               <div className="flex gap-2">
                 {post.tags.map((tag) => (
-                  <span key={tag} className="text-xs font-bold uppercase tracking-widest border border-white/10 px-2 py-1 rounded-full">
+                  <span key={tag} className="text-xs font-bold uppercase tracking-widest border border-border px-2 py-1 rounded-full">
                     {tag}
                   </span>
                 ))}
@@ -103,7 +103,7 @@ export default function BlogPost() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="prose prose-invert prose-lg max-w-none"
+            className="prose prose-lg max-w-none"
           >
             <div className="markdown-body">
               <ReactMarkdown>{post.content}</ReactMarkdown>
@@ -114,18 +114,18 @@ export default function BlogPost() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-24 pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8"
+            className="mt-24 pt-12 border-t border-border flex flex-col md:flex-row justify-between items-center gap-8"
           >
             <div className="flex flex-col gap-2">
-              <span className="text-sm font-bold uppercase tracking-widest text-muted">Share this article</span>
+              <span className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Share this article</span>
               <div className="flex gap-4">
                 {/* Social Share Buttons (Mock) */}
-                <button className="text-muted hover:text-white transition-colors">Twitter</button>
-                <button className="text-muted hover:text-white transition-colors">LinkedIn</button>
-                <button className="text-muted hover:text-white transition-colors">Facebook</button>
+                <button className="text-muted-foreground hover:text-foreground transition-colors">Twitter</button>
+                <button className="text-muted-foreground hover:text-foreground transition-colors">LinkedIn</button>
+                <button className="text-muted-foreground hover:text-foreground transition-colors">Facebook</button>
               </div>
             </div>
-            <Link to="/blog" className="px-8 py-4 rounded-full glass font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300">
+            <Link to="/blog" className="px-8 py-4 rounded-full glass font-bold uppercase tracking-widest hover:bg-foreground hover:text-background transition-all duration-300">
               Back to Blog
             </Link>
           </motion.div>

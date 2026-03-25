@@ -7,7 +7,9 @@ import Blog from './components/Blog';
 import BlogPost from './components/BlogPost';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
-import Loader from './components/Loader';
+import LoadingScreen from './components/LoadingScreen';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { FirebaseProvider } from './context/FirebaseContext';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -22,8 +24,9 @@ function ScrollToTop() {
   return null;
 }
 
-export default function App() {
+function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (isLoading) {
@@ -32,38 +35,42 @@ export default function App() {
       document.body.style.overflow = 'unset';
     }
     
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500);
-
     return () => {
-      clearTimeout(timer);
       document.body.style.overflow = 'unset';
     };
   }, [isLoading]);
 
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black">
-        <AnimatePresence>
-          {isLoading && <Loader key="loader" />}
-        </AnimatePresence>
+    <div className="relative min-h-screen transition-colors duration-500 bg-background text-foreground">
+      <AnimatePresence mode="wait">
+        {isLoading && <LoadingScreen key="loader" onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
 
-        <CustomCursor />
-        <Navbar />
+      <CustomCursor />
+      <Navbar />
 
-        <main className="relative z-10">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<BlogPost />} />
-          </Routes>
-        </main>
+      <main className="relative z-10">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
+        </Routes>
+      </main>
 
-        <Footer />
-      </div>
-    </Router>
+      <Footer />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <FirebaseProvider>
+        <Router>
+          <ScrollToTop />
+          <AppContent />
+        </Router>
+      </FirebaseProvider>
+    </ThemeProvider>
   );
 }

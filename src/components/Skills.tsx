@@ -19,7 +19,7 @@ export default function Skills() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="skills" className="py-24 md:py-48 px-6 md:px-12 bg-black">
+    <section id="skills" className="py-24 md:py-48 px-6 md:px-12 bg-background">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -28,7 +28,7 @@ export default function Skills() {
           className="mb-24 text-center"
         >
           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6">Expertise</h2>
-          <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             A diverse set of skills ranging from visual design to technical implementation.
           </p>
         </motion.div>
