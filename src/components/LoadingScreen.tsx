@@ -2,12 +2,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useEffect, useState } from 'react';
 
 export default function LoadingScreen({ onComplete }: { onComplete: () => void }) {
-  const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const totalDuration = 10000; // 10 seconds
-    const interval = 50; // Update every 50ms
+    const totalDuration = 4000; // 4 seconds for a smooth journey
+    const interval = 30;
     const stepSize = 100 / (totalDuration / interval);
 
     const timer = setInterval(() => {
@@ -21,127 +20,135 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       });
     }, interval);
 
-    const timers = [
-      setTimeout(() => setStep(1), 2000), // Activate Sharingan
-      setTimeout(() => setStep(2), 5000), // Genjutsu effect
-      setTimeout(() => setStep(3), 8500), // Fade out
-      setTimeout(() => onComplete(), 10000),
-    ];
+    const completeTimer = setTimeout(() => {
+      onComplete();
+    }, totalDuration + 800);
 
     return () => {
       clearInterval(timer);
-      timers.forEach(clearTimeout);
+      clearTimeout(completeTimer);
     };
   }, [onComplete]);
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, filter: 'blur(20px)' }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
-      className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden"
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center overflow-hidden font-mono"
     >
-      {/* Background Ripple */}
-      <AnimatePresence>
-        {step >= 2 && (
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 4, opacity: [0, 0.2, 0] }}
-            transition={{ duration: 3, repeat: Infinity }}
-            className="absolute w-[500px] h-[500px] border-4 border-red-600 rounded-full"
-          />
-        )}
-      </AnimatePresence>
-
-      <div className="relative w-48 h-48 md:w-64 md:h-64">
-        {/* Sharingan Eye */}
+      <div className="relative w-full max-w-4xl px-12 flex flex-col items-center justify-center">
+        {/* Journey Title */}
         <motion.div
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full h-full rounded-full relative overflow-hidden border-4 border-red-900/50"
-          style={{ 
-            background: 'radial-gradient(circle, #ff0000 0%, #4a0000 100%)',
-            boxShadow: '0 0 100px rgba(255, 0, 0, 0.3)'
-          }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-16 text-center"
         >
-          {/* Mangekyou Pattern */}
-          <motion.svg
-            viewBox="0 0 100 100"
-            className="w-full h-full"
-            animate={{ 
-              rotate: step >= 1 ? 1440 : 0,
-              scale: step >= 2 ? [1, 1.1, 1] : 1
-            }}
-            transition={{ 
-              rotate: { duration: 8, ease: "easeInOut" },
-              scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-            }}
-          >
-            <g transform="translate(50, 50)">
-              {[0, 120, 240].map((angle) => (
-                <motion.path
-                  key={angle}
-                  d="M 0,-5 C 15,-5 25,-25 25,-40 C 25,-25 15,-10 0,-10 Z"
-                  fill="black"
-                  transform={`rotate(${angle})`}
-                />
-              ))}
-              <circle cx="0" cy="0" r="8" fill="black" />
-              <circle cx="0" cy="0" r="25" fill="none" stroke="black" strokeWidth="1.5" opacity="0.3" />
-            </g>
-          </motion.svg>
+          <h2 className="text-3xl font-bold tracking-tighter mb-2 bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent">
+            DEPARTING FOR SUCCESS
+          </h2>
+          <p className="text-[10px] uppercase tracking-[0.5em] text-muted-foreground">Destination: Yashpal's Portfolio</p>
         </motion.div>
 
-        {/* Glow Effect */}
-        <motion.div
-          animate={{ 
-            opacity: step >= 1 ? [0.2, 0.5, 0.2] : 0,
-            scale: step >= 1 ? [1, 1.2, 1] : 1
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute inset-0 bg-red-600 rounded-full blur-[60px] -z-10"
-        />
-      </div>
+        {/* Railway Track Container */}
+        <div className="relative w-full h-24 flex items-end">
+          {/* The Track */}
+          <div className="absolute bottom-0 left-0 w-full h-4 flex flex-col justify-between">
+            {/* Rails */}
+            <div className="w-full h-[2px] bg-muted-foreground/20" />
+            <div className="w-full h-[2px] bg-muted-foreground/20" />
+            
+            {/* Sleepers (Wooden planks) */}
+            <div className="absolute inset-0 flex justify-between px-2">
+              {[...Array(20)].map((_, i) => (
+                <div key={i} className="w-[2px] h-full bg-muted-foreground/10" />
+              ))}
+            </div>
+          </div>
 
-      {/* Progress & Percentage */}
-      <div className="mt-16 w-64 flex flex-col items-center gap-4">
-        <div className="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
+          {/* Finish Flag */}
           <motion.div 
-            className="h-full bg-red-600"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.1 }}
-          />
+            className="absolute bottom-4 right-0 z-20"
+            animate={{ rotate: [0, 5, -5, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <span className="text-4xl">🏁</span>
+          </motion.div>
+
+          {/* The Train */}
+          <motion.div
+            className="absolute bottom-2 z-10"
+            style={{ left: `${progress}%`, translateX: '-100%' }}
+            transition={{ type: "spring", stiffness: 50, damping: 20 }}
+          >
+            <div className="relative flex flex-col items-center">
+              {/* Steam Particles */}
+              <div className="absolute -top-8 left-4 flex flex-col-reverse gap-1">
+                {[...Array(3)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ 
+                      scale: [1, 2], 
+                      opacity: [0.4, 0],
+                      y: [-10, -40],
+                      x: [0, 10]
+                    }}
+                    transition={{ 
+                      duration: 1, 
+                      repeat: Infinity, 
+                      delay: i * 0.3,
+                      ease: "easeOut"
+                    }}
+                    className="w-3 h-3 bg-muted-foreground/20 rounded-full blur-[2px]"
+                  />
+                ))}
+              </div>
+
+              {/* Train Engine SVG */}
+              <div className="text-red-600 drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-16 h-16">
+                  <path d="M4,15V9H12V7H20V15H4M20,15V17H22V15H20M4,15V17H2V15H4M12,17A2,2 0 0,1 10,19A2,2 0 0,1 8,17A2,2 0 0,1 10,15A2,2 0 0,1 12,17M18,17A2,2 0 0,1 16,19A2,2 0 0,1 14,17A2,2 0 0,1 16,15A2,2 0 0,1 18,17Z" />
+                </svg>
+              </div>
+
+              {/* Movement Vibration */}
+              <motion.div
+                animate={{ y: [0, -1, 0] }}
+                transition={{ duration: 0.1, repeat: Infinity }}
+              />
+            </div>
+          </motion.div>
         </div>
-        <div className="flex justify-between w-full font-mono text-[10px] tracking-widest text-red-600/60 uppercase">
-          <span>{step === 0 ? "Initializing" : step === 1 ? "Activating" : "Entering Genjutsu"}</span>
-          <span>{Math.round(progress)}%</span>
+
+        {/* Progress Info */}
+        <div className="mt-24 flex flex-col items-center gap-8 w-full max-w-md">
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground font-bold">
+              {progress < 100 ? "Traveling to Destination..." : "Arrival at Platform 1"}
+            </span>
+            <div className="flex items-center gap-4">
+              <div className="h-[1px] w-12 bg-muted-foreground/20" />
+              <span className="text-2xl font-bold tracking-tighter text-foreground">{Math.round(progress)}%</span>
+              <div className="h-[1px] w-12 bg-muted-foreground/20" />
+            </div>
+          </div>
+
+          {/* Subtle Progress Bar */}
+          <div className="w-full h-[2px] bg-muted-foreground/5 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-red-600"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.1 }}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Ambient Particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ 
-              x: Math.random() * window.innerWidth, 
-              y: Math.random() * window.innerHeight,
-              opacity: 0 
-            }}
-            animate={{ 
-              y: [null, Math.random() * -100],
-              opacity: [0, 0.3, 0]
-            }}
-            transition={{ 
-              duration: 3 + Math.random() * 2, 
-              repeat: Infinity,
-              delay: Math.random() * 5
-            }}
-            className="absolute w-1 h-1 bg-red-500 rounded-full blur-[1px]"
-          />
-        ))}
+      {/* Background Ambience */}
+      <div className="absolute inset-0 -z-10 opacity-20">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.05),transparent_70%)]" />
       </div>
     </motion.div>
   );

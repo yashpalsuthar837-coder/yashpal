@@ -39,9 +39,6 @@ const skillCategories = [
 ];
 
 export default function Skills() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section id="skills" className="py-24 md:py-48 px-6 md:px-12 bg-background relative overflow-hidden">
       {/* Background Accent */}
@@ -50,7 +47,8 @@ export default function Skills() {
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-24"
         >
@@ -60,13 +58,14 @@ export default function Skills() {
           </p>
         </motion.div>
 
-        <div ref={ref} className="grid md:grid-cols-3 gap-12">
+        <div className="grid md:grid-cols-3 gap-12">
           {skillCategories.map((category, catIndex) => (
             <motion.div
               key={category.title}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: catIndex * 0.2, ease: [0.16, 1, 0.3, 1] }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: catIndex * 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="p-8 rounded-3xl glass border border-white/5 flex flex-col gap-8"
             >
               <div className="flex items-center gap-4">
@@ -88,11 +87,29 @@ export default function Skills() {
                     </div>
                     <div className="h-[2px] w-full bg-white/5 overflow-hidden rounded-full">
                       <motion.div
-                        initial={{ scaleX: 0 }}
-                        animate={isInView ? { scaleX: skill.level / 100 } : {}}
-                        transition={{ duration: 1.5, delay: (catIndex * 0.2) + (skillIndex * 0.1), ease: [0.16, 1, 0.3, 1] }}
-                        className="h-full bg-red-600 origin-left"
-                      />
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${skill.level}%` }}
+                        viewport={{ once: true }}
+                        transition={{ 
+                          duration: 1.8, 
+                          delay: 0.2 + (skillIndex * 0.1), 
+                          ease: [0.16, 1, 0.3, 1] 
+                        }}
+                        className="h-full bg-red-600 relative"
+                      >
+                        <motion.div 
+                          animate={{ 
+                            opacity: [0.2, 0.5, 0.2],
+                            x: ['-100%', '100%']
+                          }}
+                          transition={{ 
+                            duration: 2, 
+                            repeat: Infinity, 
+                            ease: "linear" 
+                          }}
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                        />
+                      </motion.div>
                     </div>
                   </div>
                 ))}

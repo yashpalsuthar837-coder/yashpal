@@ -53,6 +53,14 @@
   .glass {
     @apply bg-foreground/5 backdrop-blur-xl border border-foreground/10;
   }
+  .liquid-glass {
+    @apply bg-background/40 backdrop-blur-[16px] border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] rounded-[2rem];
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  .dark .liquid-glass {
+    @apply bg-black/40 border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50;
   }

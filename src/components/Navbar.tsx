@@ -92,40 +92,45 @@ export default function Navbar() {
         </motion.div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-8 items-center">
-          {navLinks.map((link) => (
-            <motion.div
-              key={link.name}
-              whileHover={{ y: -2 }}
-              whileTap={{ y: 0 }}
-              onMouseEnter={handleHover}
-            >
-              <Link
-                to={link.href}
-                onClick={(e) => handleLinkClick(e, link.href)}
-                className={cn(
-                  "text-sm font-medium transition-colors",
-                  location.pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                )}
+        <div className="hidden md:flex gap-4 items-center">
+          <div className="flex gap-2 p-1.5 rounded-full liquid-glass">
+            {navLinks.map((link) => (
+              <motion.div
+                key={link.name}
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
+                onMouseEnter={handleHover}
               >
-                {link.name}
-              </Link>
-            </motion.div>
-          ))}
+                <Link
+                  to={link.href}
+                  onClick={(e) => handleLinkClick(e, link.href)}
+                  className={cn(
+                    "px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300",
+                    location.pathname === link.href 
+                      ? "bg-foreground text-background shadow-lg" 
+                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              </motion.div>
+            ))}
+          </div>
           
-          {/* Sound Toggle Button */}
-          <motion.button
-            onClick={() => {
-              playSound('click');
-              triggerHaptic();
-              toggleMute();
-            }}
-            onMouseEnter={handleHover}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="relative w-10 h-10 flex items-center justify-center rounded-full glass"
-            title={isMuted ? "Unmute Sounds" : "Mute Sounds"}
-          >
+          <div className="flex gap-2 ml-2">
+            {/* Sound Toggle Button */}
+            <motion.button
+              onClick={() => {
+                playSound('click');
+                triggerHaptic();
+                toggleMute();
+              }}
+              onMouseEnter={handleHover}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="relative w-10 h-10 flex items-center justify-center rounded-full liquid-glass"
+              title={isMuted ? "Unmute Sounds" : "Mute Sounds"}
+            >
             <AnimatePresence mode="wait">
               {isMuted ? (
                 <motion.div
@@ -155,7 +160,7 @@ export default function Navbar() {
             onMouseEnter={handleHover}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="relative w-10 h-10 flex items-center justify-center rounded-full glass"
+            className="relative w-10 h-10 flex items-center justify-center rounded-full liquid-glass"
             title={`Switch to ${theme === 'light' ? 'Dark' : theme === 'dark' ? 'Extra Dark' : 'Light'} Mode`}
           >
             <AnimatePresence mode="wait">
@@ -200,11 +205,12 @@ export default function Navbar() {
               playSound('click');
               triggerHaptic();
             }}
-            className="px-5 py-2 rounded-full glass text-sm font-medium"
+            className="px-6 py-2 rounded-full liquid-glass text-xs font-bold uppercase tracking-wider bg-foreground text-background shadow-xl"
           >
             Let's Talk
           </motion.button>
         </div>
+      </div>
 
         {/* Mobile Menu Toggle */}
         <div className="flex items-center gap-2 md:hidden">
@@ -214,20 +220,22 @@ export default function Navbar() {
               triggerHaptic();
               toggleMute();
             }}
-            className="w-10 h-10 flex items-center justify-center rounded-full glass"
+            className="w-10 h-10 flex items-center justify-center rounded-full liquid-glass"
           >
             {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
           </motion.button>
           <motion.button
             onClick={handleCycleTheme}
-            className="w-10 h-10 flex items-center justify-center rounded-full glass"
+            className="w-10 h-10 flex items-center justify-center rounded-full liquid-glass"
           >
             {theme === 'light' ? <Sun size={18} /> : theme === 'dark' ? <Moon size={18} /> : <Eclipse size={18} />}
           </motion.button>
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             className={cn(
-              "text-foreground w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300",
-              isScrolled ? "glass" : "bg-transparent"
+              "text-foreground w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 liquid-glass shadow-xl",
+              isOpen ? "bg-foreground text-background" : "bg-background/40"
             )}
             onClick={() => {
               playSound('click');
@@ -235,56 +243,103 @@ export default function Navbar() {
               setIsOpen(!isOpen);
             }}
           >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+            <AnimatePresence mode="wait">
+              {isOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                >
+                  <X size={24} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                >
+                  <Menu size={24} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
       </div>
 
       {/* Mobile Nav Overlay */}
-      <motion.div
-        initial={false}
-        animate={isOpen ? { opacity: 1, x: 0 } : { opacity: 0, x: '100%' }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className={cn(
-          "fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 md:hidden",
-          "bg-background/90 backdrop-blur-2xl",
-          !isOpen && "pointer-events-none"
-        )}
-      >
-        {/* Prominent Close Button inside Overlay */}
-        <motion.button
-          initial={{ opacity: 0, scale: 0 }}
-          animate={isOpen ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
-          transition={{ delay: 0.3 }}
-          onClick={() => {
-            playSound('click');
-            triggerHaptic();
-            setIsOpen(false);
-          }}
-          className="absolute top-8 right-8 w-14 h-14 rounded-full glass flex items-center justify-center text-foreground hover:bg-foreground hover:text-background transition-colors"
-        >
-          <X size={32} />
-        </motion.button>
-
-        {navLinks.map((link, index) => (
+      <AnimatePresence>
+        {isOpen && (
           <motion.div
-            key={link.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ delay: 0.1 + index * 0.1 }}
-            whileHover={{ scale: 1.1 }}
-            onMouseEnter={handleHover}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center md:hidden bg-background/60 backdrop-blur-sm"
+            style={{ transform: 'translateZ(0)' }}
           >
-            <Link
-              to={link.href}
-              className="text-4xl font-bold tracking-tighter"
-              onClick={(e) => handleLinkClick(e, link.href)}
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 10 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="w-[92%] max-w-sm p-6 liquid-glass flex flex-col gap-6 shadow-2xl relative overflow-hidden border-white/30"
+              style={{ transform: 'translateZ(0)' }}
             >
-              {link.name}
-            </Link>
+              {/* Internal Close Button - More Prominent */}
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => {
+                  playSound('click');
+                  triggerHaptic();
+                  setIsOpen(false);
+                }}
+                className="absolute top-4 right-4 w-12 h-12 rounded-full bg-foreground/10 flex items-center justify-center text-foreground hover:bg-foreground hover:text-background transition-all duration-300 z-50"
+              >
+                <X size={24} />
+              </motion.button>
+
+              <div className="flex flex-col gap-1 mt-8">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 + index * 0.03 }}
+                  >
+                    <Link
+                      to={link.href}
+                      className={cn(
+                        "text-4xl font-black tracking-tighter py-3 px-2 block transition-all duration-300 rounded-2xl active:bg-foreground/5",
+                        location.pathname === link.href ? "text-foreground" : "text-muted-foreground"
+                      )}
+                      onClick={(e) => handleLinkClick(e, link.href)}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  playSound('click');
+                  triggerHaptic();
+                  setIsOpen(false);
+                }}
+                className="mt-4 w-full py-5 rounded-2xl bg-foreground text-background font-bold uppercase tracking-widest text-xs shadow-xl active:scale-95 transition-transform"
+              >
+                Let's Talk
+              </motion.button>
+            </motion.div>
           </motion.div>
-        ))}
-      </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }
