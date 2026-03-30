@@ -15,9 +15,11 @@
         "link": { "type": "string" },
         "github": { "type": "string" },
         "category": { "type": "string" },
+        "role": { "type": "string" },
+        "date": { "type": "string" },
         "order": { "type": "integer" }
       },
-      "required": ["title", "description", "problemStatement", "solution", "image", "tags", "category"]
+      "required": ["title", "description", "problemStatement", "solution", "image", "tags", "category", "role", "date"]
     },
     "blogPost": {
       "title": "Blog Post",
@@ -48,6 +50,32 @@
         "timestamp": { "type": "string", "format": "date-time" }
       },
       "required": ["name", "email", "message", "timestamp"]
+    },
+    "visitor": {
+      "title": "Visitor",
+      "description": "A visitor session",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "path": { "type": "string" },
+        "userAgent": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["sessionId", "timestamp", "path"]
+    },
+    "activity": {
+      "title": "Activity",
+      "description": "A user activity",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "description": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" }
+      },
+      "required": ["type", "description", "timestamp"]
     }
   },
   "firestore": {
@@ -62,6 +90,14 @@
     "/messages/{messageId}": {
       "schema": "message",
       "description": "Collection of contact messages"
+    },
+    "/visitors/{visitorId}": {
+      "schema": "visitor",
+      "description": "Collection of visitor sessions"
+    },
+    "/activities/{activityId}": {
+      "schema": "activity",
+      "description": "Collection of user activities"
     }
   }
 }

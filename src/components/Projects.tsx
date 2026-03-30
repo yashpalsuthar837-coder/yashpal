@@ -43,6 +43,25 @@ const localProjects = [
     link: '#',
     github: '#',
   },
+  {
+    title: 'Eco-Track Mobile App',
+    category: 'Mobile App',
+    image: 'https://picsum.photos/seed/project3/800/600',
+    description: 'A sustainability tracker for conscious consumers.',
+    problemStatement: 'Users wanted to reduce their carbon footprint but found it difficult to track their daily impact across different categories like food, travel, and energy.',
+    solution: 'Designed and developed a cross-platform mobile app that gamifies sustainability through daily challenges and real-time impact visualization.',
+    features: [
+      'Real-time carbon footprint calculator',
+      'Gamified sustainability challenges',
+      'Community leaderboard and social sharing',
+      'Integration with smart home devices'
+    ],
+    technologies: ['React Native', 'Firebase', 'Node.js', 'D3.js'],
+    role: 'Full Stack Developer',
+    date: 'Aug 2023',
+    link: '#',
+    github: '#',
+  },
 ];
 
 export default function Projects() {
@@ -225,30 +244,33 @@ export default function Projects() {
                     </div>
 
                     {selectedProject.features && (
-                      <div>
-                        <h4 className="text-sm font-bold uppercase tracking-widest text-red-600 mb-3 flex items-center gap-2">
+                      <div className="p-6 rounded-3xl bg-foreground/5 border border-foreground/10">
+                        <h4 className="text-sm font-bold uppercase tracking-widest text-red-600 mb-4 flex items-center gap-2">
                           <Filter size={14} /> Key Features
                         </h4>
-                        <ul className="list-disc list-inside text-muted-foreground space-y-2">
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           {selectedProject.features.map((feature: string, i: number) => (
-                            <li key={i}>{feature}</li>
+                            <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 shrink-0" />
+                              {feature}
+                            </li>
                           ))}
                         </ul>
                       </div>
                     )}
 
                     <div className="grid grid-cols-2 gap-6">
-                      <div>
-                        <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
+                      <div className="p-6 rounded-3xl bg-foreground/5 border border-foreground/10">
+                        <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-2">
                           <User size={14} /> Role
                         </h4>
-                        <p className="font-medium">{selectedProject.role}</p>
+                        <p className="font-bold text-lg">{selectedProject.role}</p>
                       </div>
-                      <div>
-                        <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
+                      <div className="p-6 rounded-3xl bg-foreground/5 border border-foreground/10">
+                        <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-2">
                           <Calendar size={14} /> Date
                         </h4>
-                        <p className="font-medium">{selectedProject.date}</p>
+                        <p className="font-bold text-lg">{selectedProject.date}</p>
                       </div>
                     </div>
 

@@ -45,6 +45,24 @@ service cloud.firestore {
     //   - role: string (required)
     //   - email: string (required)
     //
+    // Collection: activities
+    // Document ID: auto-generated
+    // Fields:
+    //   - type: string (required)
+    //   - description: string (required)
+    //   - timestamp: string (required)
+    //   - userId: string (optional)
+    //   - userName: string (optional)
+    //
+    // Collection: visitors
+    // Document ID: auto-generated
+    // Fields:
+    //   - sessionId: string (required)
+    //   - timestamp: string (required)
+    //   - path: string (required)
+    //   - userAgent: string (optional)
+    //   - userId: string (optional)
+    //
     // ===============================================================
 
     // ===============================================================
@@ -136,6 +154,16 @@ service cloud.firestore {
       allow read: if isOwner(userId) || isAdmin();
       allow create: if isAuthenticated() && isOwner(userId) && request.resource.data.role == 'user';
       allow update: if isAdmin();
+    }
+
+    match /visitors/{visitorId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /activities/{activityId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
     }
 
     match /{path=**} {

@@ -8,9 +8,11 @@ import BlogPost from './components/BlogPost';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/LoadingScreen';
+import AdminDashboard from './components/AdminDashboard';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { FirebaseProvider } from './context/FirebaseContext';
 import { SoundProvider } from './context/SoundContext';
+import { useVisitorTracking } from './hooks/useVisitorTracking';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -28,6 +30,9 @@ function ScrollToTop() {
 function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
   const { theme } = useTheme();
+
+  // Track visitors on every page change
+  useVisitorTracking();
 
   useEffect(() => {
     if (isLoading) {
@@ -55,6 +60,7 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </main>
 

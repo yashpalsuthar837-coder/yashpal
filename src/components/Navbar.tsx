@@ -6,6 +6,7 @@ import { cn } from '@/src/lib/utils';
 import { useTheme } from '../context/ThemeContext';
 import { useSound } from '../context/SoundContext';
 import { playSound } from '../lib/sounds';
+import Login from './Login';
 
 const navLinks = [
   { name: 'About', href: '/#about' },
@@ -197,18 +198,7 @@ export default function Navbar() {
             </AnimatePresence>
           </motion.button>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onMouseEnter={handleHover}
-            onClick={() => {
-              playSound('click');
-              triggerHaptic();
-            }}
-            className="px-6 py-2 rounded-full liquid-glass text-xs font-bold uppercase tracking-wider bg-foreground text-background shadow-xl"
-          >
-            Let's Talk
-          </motion.button>
+          <Login />
         </div>
       </div>
 
@@ -322,20 +312,9 @@ export default function Navbar() {
                 ))}
               </div>
               
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  playSound('click');
-                  triggerHaptic();
-                  setIsOpen(false);
-                }}
-                className="mt-4 w-full py-5 rounded-2xl bg-foreground text-background font-bold uppercase tracking-widest text-xs shadow-xl active:scale-95 transition-transform"
-              >
-                Let's Talk
-              </motion.button>
+              <div className="mt-4">
+                <Login />
+              </div>
             </motion.div>
           </motion.div>
         )}
