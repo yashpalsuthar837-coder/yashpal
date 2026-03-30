@@ -1,92 +1,86 @@
-import { useEffect, useState } from 'react';
-import { motion, useSpring, useMotionValue } from 'motion/react';
+import React, { useEffect, useState } from 'react';
+import { motion, useSpring } from 'motion/react';
 
-export default function CustomCursor() {
+const CustomCursor = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  // Smooth springs for the cursor
-  const cursorX = useSpring(mouseX, { damping: 20, stiffness: 250 });
-  const cursorY = useSpring(mouseY, { damping: 20, stiffness: 250 });
-
-  // Slightly slower springs for the follower ring
-  const followerX = useSpring(mouseX, { damping: 30, stiffness: 150 });
-  const followerY = useSpring(mouseY, { damping: 30, stiffness: 150 });
+  const cursorX = useSpring(0, { stiffness: 500, damping: 28 });
+  const cursorY = useSpring(0, { stiffness: 500, damping: 28 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isVisible) setIsVisible(true);
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
+      setMousePosition({ x: e.clientX, y: e.clientY });
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const isInteractive = 
-        target.tagName === 'A' || 
-        target.tagName === 'BUTTON' || 
-        target.closest('button') || 
+      if (
+        target.tagName === 'A' ||
+        target.tagName === 'BUTTON' ||
         target.closest('a') ||
-        target.closest('.group') ||
-        window.getComputedStyle(target).cursor === 'pointer';
-      
-      setIsHovering(!!isInteractive);
+        target.closest('button') ||
+        target.classList.contains('group')
+      ) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
     };
-
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseover', handleMouseOver);
-    document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('mouseenter', handleMouseEnter);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseover', handleMouseOver);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [mouseX, mouseY, isVisible]);
-
-  if (!isVisible) return null;
+  }, [cursorX, cursorY]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
-      {/* Main Dot */}
+    <div className="hidden md:block">
+      {/* Main cursor dot */}
       <motion.div
-        className="custom-cursor"
+        className="fixed top-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
         style={{
           x: cursorX,
           y: cursorY,
           translateX: '-50%',
           translateY: '-50%',
-          scale: isHovering ? 4 : 1,
-        }}
-        transition={{
-          scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
         }}
       />
       
-      {/* Follower Ring */}
+      {/* Cursor follower ring */}
       <motion.div
-        className="custom-cursor-follower"
+        className="fixed top-0 left-0 w-10 h-10 border border-white/30 rounded-full pointer-events-none z-[9998]"
+        animate={{
+          scale: isHovering ? 1.5 : 1,
+          backgroundColor: isHovering ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+          borderColor: isHovering ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.3)',
+        }}
         style={{
-          x: followerX,
-          y: followerY,
+          x: cursorX,
+          y: cursorY,
           translateX: '-50%',
           translateY: '-50%',
-          scale: isHovering ? 1.5 : 1,
-          opacity: isHovering ? 0 : 1,
         }}
-        transition={{
-          scale: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-          opacity: { duration: 0.2 }
+        transition={{ type: 'spring', stiffness: 250, damping: 20 }}
+      />
+      
+      {/* Glow effect */}
+      <motion.div
+        className="fixed top-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none z-[9997]"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          translateX: '-50%',
+          translateY: '-50%',
         }}
       />
     </div>
   );
-}
+};
+
+export default CustomCursor;

@@ -1,67 +1,41 @@
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
-import Home from './components/Home';
-import Blog from './components/Blog';
-import BlogPost from './components/BlogPost';
+import Hero from './components/Hero';
+import About from './components/About';
+import Skills from './components/Skills';
+import Projects from './components/Projects';
+import Journey from './components/Journey';
+import Services from './components/Services';
+import Quote from './components/Quote';
+import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/LoadingScreen';
-import AdminDashboard from './components/AdminDashboard';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
-import { FirebaseProvider } from './context/FirebaseContext';
-import { SoundProvider } from './context/SoundContext';
-import { useVisitorTracking } from './hooks/useVisitorTracking';
 
-function ScrollToTop() {
-  const { pathname, hash } = useLocation();
-  
-  useEffect(() => {
-    // Only scroll to top if there is no hash
-    if (!hash) {
-      window.scrollTo(0, 0);
-    }
-  }, [pathname, hash]);
-  
-  return null;
-}
+// Lazy load 3D background for performance
+const Background3D = lazy(() => import('./components/Background3D'));
 
-function AppContent() {
-  const [isLoading, setIsLoading] = useState(true);
-  const { theme } = useTheme();
-
-  // Track visitors on every page change
-  useVisitorTracking();
-
-  useEffect(() => {
-    if (isLoading) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isLoading]);
-
+function App() {
   return (
-    <div className="relative min-h-screen transition-colors duration-500 bg-background text-foreground">
-      <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen key="loader" onComplete={() => setIsLoading(false)} />}
-      </AnimatePresence>
-
+    <div className="relative min-h-screen bg-[#020617] text-slate-100 selection:bg-blue-500/30 selection:text-white overflow-x-hidden">
+      <LoadingScreen />
       <CustomCursor />
-      <Navbar />
+      
+      <Suspense fallback={<div className="fixed inset-0 bg-[#020617]" />}>
+        <Background3D />
+      </Suspense>
 
-      <main className="relative z-10">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-        </Routes>
+      <Navbar />
+      
+      <main>
+        <Hero />
+        <About />
+        <Skills />
+        <Projects />
+        <Journey />
+        <Services />
+        <Quote />
+        <Contact />
       </main>
 
       <Footer />
@@ -69,17 +43,4 @@ function AppContent() {
   );
 }
 
-export default function App() {
-  return (
-    <ThemeProvider>
-      <SoundProvider>
-        <FirebaseProvider>
-          <Router>
-            <ScrollToTop />
-            <AppContent />
-          </Router>
-        </FirebaseProvider>
-      </SoundProvider>
-    </ThemeProvider>
-  );
-}
+export default App;

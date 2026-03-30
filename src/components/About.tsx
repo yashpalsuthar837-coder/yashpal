@@ -1,126 +1,113 @@
-import { motion, useInView, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { useRef, useEffect } from 'react';
-import { Cpu } from 'lucide-react';
+import React from 'react';
+import { motion } from 'motion/react';
+import { MapPin, GraduationCap, Code, Cpu, Sparkles } from 'lucide-react';
 
-export default function About() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 25, stiffness: 150 };
-  const smoothMouseX = useSpring(mouseX, springConfig);
-  const smoothMouseY = useSpring(mouseY, springConfig);
-
-  const rotateX = useTransform(smoothMouseY, [-0.5, 0.5], [5, -5]);
-  const rotateY = useTransform(smoothMouseX, [-0.5, 0.5], [-5, 5]);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
-      mouseX.set(clientX / innerWidth - 0.5);
-      mouseY.set(clientY / innerHeight - 0.5);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
+const About = () => {
+  const infoCards = [
+    {
+      icon: MapPin,
+      title: "Location",
+      description: "Rajasthan, India",
+      color: "text-blue-400"
+    },
+    {
+      icon: GraduationCap,
+      title: "Education",
+      description: "Passed 10th in 2023 • Passed 12th in 2025",
+      color: "text-cyan-400"
+    },
+    {
+      icon: Code,
+      title: "Interests",
+      description: "Technology • Web Development • AI Tools",
+      color: "text-purple-400"
+    }
+  ];
 
   return (
-    <section id="about" className="relative py-24 md:py-48 px-6 md:px-12 bg-background overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-5">
-        <motion.div 
-          style={{ x: useTransform(smoothMouseX, [-0.5, 0.5], [30, -30]), y: useTransform(smoothMouseY, [-0.5, 0.5], [30, -30]) }}
-          className="absolute top-20 left-10 w-64 h-64 bg-[#FF6321] rounded-full blur-[100px]" 
-        />
-        <motion.div 
-          style={{ x: useTransform(smoothMouseX, [-0.5, 0.5], [-30, 30]), y: useTransform(smoothMouseY, [-0.5, 0.5], [-30, 30]) }}
-          className="absolute bottom-20 right-10 w-96 h-96 bg-[#FFD700] rounded-full blur-[120px]" 
-        />
-      </div>
-
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 md:gap-24 items-center relative z-10">
+    <section id="about" className="py-24 relative overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-16">
           <motion.div
-            ref={ref}
             initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            style={{ rotateX, rotateY, perspective: 1000 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative aspect-square md:aspect-[4/5] overflow-hidden rounded-3xl glass group"
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="lg:w-1/2"
           >
-            <img
-              src="https://picsum.photos/seed/yashpal/800/1000"
-              alt="Yashpal"
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-              referrerPolicy="no-referrer"
-            />
-            {/* Floating Tech Icon */}
-            <motion.div
-              animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-6 right-6 w-12 h-12 rounded-2xl glass flex items-center justify-center text-[#FF6321] shadow-xl"
-            >
-              <Cpu size={24} />
-            </motion.div>
+            <span className="text-cyan-400 font-medium tracking-widest uppercase mb-4 block">About Me</span>
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-8 leading-tight">
+              I'm <span className="text-gradient">Yashpal</span>, a Tech Explorer and Digital Creator.
+            </h2>
+            <p className="text-lg text-slate-400 mb-8 leading-relaxed">
+              I'm deeply passionate about the intersection of design and technology. My journey in the tech world started with a curiosity about how things work on the internet, which quickly evolved into a dedicated pursuit of building creative web projects and exploring the vast potential of AI tools.
+            </p>
+            <p className="text-lg text-slate-400 mb-10 leading-relaxed">
+              Based in Rajasthan, India, I'm constantly learning and experimenting with new technologies to build modern digital experiences that feel immersive and futuristic.
+            </p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {infoCards.map((card, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ y: -5 }}
+                  className="glass p-6 rounded-2xl border-white/5 hover:border-white/20 transition-all group"
+                >
+                  <div className={`p-3 rounded-xl bg-white/5 w-fit mb-4 group-hover:scale-110 transition-transform ${card.color}`}>
+                    <card.icon size={24} />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">{card.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{card.description}</p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
 
-        <div className="flex flex-col gap-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-6xl font-bold tracking-tighter"
-          >
-            The Story Behind <br /> <span className="text-red-600">The Code.</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="text-lg md:text-xl text-muted-foreground leading-relaxed"
-          >
-            My journey into technology wasn't just about learning syntax; it was about discovering a new way to solve problems. Born and raised in Rajasthan, I've always been the curious student who wanted to know how things worked behind the screen. 
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-lg md:text-xl text-muted-foreground leading-relaxed"
-          >
-            From my early school days in Rajasthan to my current studies, my passion for technology has only grown. I've spent countless hours experimenting with code, building small projects, and pushing my boundaries.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-lg md:text-xl text-muted-foreground leading-relaxed"
-          >
-            My ultimate goal is to become a world-class Full Stack Developer. I don't just "write code." I build bridges between complex problems and elegant solutions. Whether it's a performance bottleneck or a UX friction point, I approach every challenge with a problem-solver's mindset and a developer's precision.
-          </motion.p>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
-            className="flex gap-8 pt-8 border-t border-foreground/10"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="lg:w-1/2 relative"
           >
-            <div className="flex flex-col group">
-              <span className="text-4xl font-bold group-hover:text-red-600 transition-colors">2023</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">10th Grade</span>
+            <div className="relative z-10 rounded-3xl overflow-hidden glass p-2 border-white/10 group">
+              <div className="aspect-square rounded-2xl overflow-hidden relative">
+                <img
+                  src="https://picsum.photos/seed/yashpal/800/800"
+                  alt="Yashpal"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-60" />
+              </div>
+              
+              {/* Floating badges */}
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-6 -right-6 glass p-4 rounded-2xl border-white/20 shadow-2xl"
+              >
+                <Sparkles className="text-cyan-400 mb-1" size={20} />
+                <span className="text-xs font-bold uppercase tracking-tighter">AI Enthusiast</span>
+              </motion.div>
+              
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute -bottom-6 -left-6 glass p-4 rounded-2xl border-white/20 shadow-2xl"
+              >
+                <Cpu className="text-blue-400 mb-1" size={20} />
+                <span className="text-xs font-bold uppercase tracking-tighter">Tech Builder</span>
+              </motion.div>
             </div>
-            <div className="w-[1px] h-12 bg-foreground/10" />
-            <div className="flex flex-col group">
-              <span className="text-4xl font-bold group-hover:text-red-600 transition-colors">2025</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">12th Grade</span>
-            </div>
+            
+            {/* Background glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/20 blur-[120px] -z-10 rounded-full" />
           </motion.div>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default About;
