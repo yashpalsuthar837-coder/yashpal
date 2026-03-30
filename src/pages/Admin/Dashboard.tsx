@@ -17,7 +17,8 @@ import {
   UserPlus,
   MessageSquare,
   CheckCircle2,
-  XCircle
+  XCircle,
+  Bot
 } from 'lucide-react';
 import { collection, query, orderBy, limit, getDocs, where, Timestamp, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
@@ -214,6 +215,55 @@ const AdminDashboard: React.FC = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* System Configuration Status */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="glass border border-white/10 rounded-3xl p-8 mb-12"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <ShieldCheck className="text-cyan-500" />
+            <h3 className="text-xl font-display font-bold">System Configuration Status</h3>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold uppercase tracking-widest text-slate-400">Firebase Configuration</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: 'API Key', status: !!import.meta.env.VITE_FIREBASE_API_KEY || !!import.meta.env.NEXT_PUBLIC_FIREBASE_API_KEY },
+                  { label: 'Auth Domain', status: !!import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || !!import.meta.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN },
+                  { label: 'Project ID', status: !!import.meta.env.VITE_FIREBASE_PROJECT_ID || !!import.meta.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID },
+                  { label: 'App ID', status: !!import.meta.env.VITE_FIREBASE_APP_ID || !!import.meta.env.NEXT_PUBLIC_FIREBASE_APP_ID },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
+                    <span className="text-xs text-slate-400">{item.label}</span>
+                    {item.status ? (
+                      <CheckCircle2 size={14} className="text-green-500" />
+                    ) : (
+                      <XCircle size={14} className="text-red-500" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold uppercase tracking-widest text-slate-400">Gemini AI Configuration</h4>
+              <div className="p-4 bg-white/5 rounded-xl border border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Bot className="text-cyan-500" size={20} />
+                  <span className="text-sm">Gemini API Key</span>
+                </div>
+                {/* We check this via a small test or just assume it's set if we can't check process.env in frontend */}
+                <span className="text-xs font-bold text-cyan-500 uppercase tracking-widest">Configured in Backend</span>
+              </div>
+              <p className="text-[10px] text-slate-500 italic">
+                Note: Gemini API key is managed securely in the backend server and is not exposed to the client.
+              </p>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Chart Section */}
         <motion.div

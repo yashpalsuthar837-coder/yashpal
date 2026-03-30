@@ -4,6 +4,7 @@ import { posts } from '@/src/blogData';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import { useRef } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 export default function BlogPost() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,10 @@ export default function BlogPost() {
   if (!post) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
+        <Helmet>
+          <title>Post Not Found | Yashpal Portfolio</title>
+          <meta name="description" content="The blog post you are looking for could not be found." />
+        </Helmet>
         <h1 className="text-4xl font-bold mb-6">Post Not Found</h1>
         <Link to="/blog" className="px-8 py-4 rounded-full glass font-bold uppercase tracking-widest hover:bg-foreground hover:text-background transition-all duration-300">
           Back to Blog
@@ -38,6 +43,31 @@ export default function BlogPost() {
       className="bg-background min-h-screen text-foreground"
       ref={containerRef}
     >
+      <Helmet>
+        <title>{`${post.title} | Yashpal's Blog`}</title>
+        <meta name="description" content={post.excerpt} />
+        <meta name="keywords" content={post.tags.join(', ')} />
+        <link rel="canonical" href={window.location.href} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:image" content={post.image} />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="article:published_time" content={new Date(post.date).toISOString()} />
+        <meta property="article:author" content="Yashpal Suthar" />
+        <meta property="article:section" content={post.tags[0]} />
+        <meta property="article:tag" content={post.tags.join(', ')} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.excerpt} />
+        <meta name="twitter:image" content={post.image} />
+        <meta name="twitter:creator" content="@yasxpal" />
+      </Helmet>
+
       {/* Hero Section */}
       <section className="relative h-[70vh] flex flex-col items-center justify-center overflow-hidden px-6">
         <motion.div

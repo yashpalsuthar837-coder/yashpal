@@ -103,12 +103,26 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleLogin}
-                className="w-full py-4 px-6 bg-white text-black font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-slate-100 transition-all shadow-xl shadow-white/10 group"
+                className="w-full py-4 px-6 bg-white text-black font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-slate-100 transition-all shadow-xl shadow-white/10 group mb-4"
               >
                 <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
                 <span>Continue with Google</span>
                 <Zap size={16} className="text-cyan-500 group-hover:animate-pulse" />
               </motion.button>
+
+              {window.self !== window.top && (
+                <motion.button
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.55 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => window.open(window.location.href, '_blank')}
+                  className="w-full py-3 px-6 bg-white/5 text-slate-300 font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all border border-white/10 text-xs uppercase tracking-widest"
+                >
+                  <span>Open in New Tab to Login</span>
+                </motion.button>
+              )}
 
               <motion.p
                 initial={{ opacity: 0 }}

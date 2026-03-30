@@ -14,6 +14,9 @@ import Journey from './components/Journey';
 import Services from './components/Services';
 import Quote from './components/Quote';
 import Contact from './components/Contact';
+import Blog from './components/Blog';
+import BlogPost from './components/BlogPost';
+import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/LoadingScreen';
@@ -36,7 +39,9 @@ const HomePage = () => (
       <Journey />
       <Services />
       <Quote />
+      <Blog />
       <Contact />
+      <ChatBot />
     </main>
     <Footer />
   </>
@@ -68,6 +73,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
             <Route 
               path="/dashboard" 
               element={
