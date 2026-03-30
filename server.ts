@@ -12,6 +12,7 @@ import authRoutes from './src/routes/auth.ts';
 import profileRoutes from './src/routes/profile.ts';
 import adminRoutes from './src/routes/admin.ts';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -19,8 +20,8 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // Connect to MongoDB
-  await connectDB();
+  // Connect to MongoDB (non-blocking)
+  connectDB();
 
   // Middleware
   app.use(securityHeaders);
@@ -56,6 +57,15 @@ async function startServer() {
   // Passport initialization
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Health check endpoint
+  app.get('/api/health', (req, res) => {
+    res.json({
+      status: 'ok',
+      db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+      env: process.env.NODE_ENV,
+    });
+  });
 
   // API Routes
   app.use('/api/auth', authRoutes);
