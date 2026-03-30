@@ -1,18 +1,46 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Send, Mail, Github, Linkedin, Instagram, MapPin, Phone } from 'lucide-react';
+import { Send, Mail, Github, Linkedin, Instagram, MapPin, Phone, Loader2 } from 'lucide-react';
+import { useActivity } from '../hooks/useActivity';
+import { toast } from 'sonner';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 const Contact = () => {
+  const { logActivity } = useActivity();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formState, setFormState] = useState({
     name: '',
     email: '',
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic
-    console.log('Form submitted:', formState);
+    setIsSubmitting(true);
+    
+    try {
+      // Log to activity_logs
+      await logActivity('CONTACT_FORM_SUBMITTED', { 
+        name: formState.name, 
+        email: formState.email 
+      });
+
+      // Save to a dedicated contacts collection
+      await addDoc(collection(db, 'contact_submissions'), {
+        ...formState,
+        timestamp: serverTimestamp(),
+        status: 'new'
+      });
+
+      toast.success('Message sent successfully! I will get back to you soon.');
+      setFormState({ name: '', email: '', message: '' });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('Failed to send message. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -43,9 +71,9 @@ const Contact = () => {
             
             <div className="space-y-8 mb-12">
               {[
-                { icon: Mail, label: "Email", value: "yashpalsuthar837@gmail.com", href: "mailto:yashpalsuthar837@gmail.com" },
+                { icon: Mail, label: "Email", value: "yashpalsuthar349@gmail.com", href: "mailto:yashpalsuthar349@gmail.com" },
                 { icon: MapPin, label: "Location", value: "Rajasthan, India", href: "#" },
-                { icon: Phone, label: "Phone", value: "+91 1234567890", href: "tel:+911234567890" }
+                { icon: Phone, label: "Phone", value: "+91 9351830130", href: "tel:+919351830130" }
               ].map((item, index) => (
                 <motion.a
                   key={index}
@@ -66,13 +94,15 @@ const Contact = () => {
 
             <div className="flex items-center gap-6">
               {[
-                { icon: Github, href: "#", label: "GitHub" },
-                { icon: Linkedin, href: "#", label: "LinkedIn" },
-                { icon: Instagram, href: "#", label: "Instagram" }
+                { icon: Github, href: "https://github.com", label: "GitHub" },
+                { icon: Linkedin, href: "https://linkedin.com/in/yashpal-suthar", label: "LinkedIn" },
+                { icon: Instagram, href: "https://instagram.com/yasxpal", label: "Instagram" }
               ].map((social, index) => (
                 <motion.a
                   key={index}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ y: -5, scale: 1.1 }}
                   className="p-4 rounded-2xl glass border-white/5 hover:border-white/20 hover:bg-white/10 transition-all text-slate-400 hover:text-cyan-400"
                   aria-label={social.label}
@@ -134,11 +164,16 @@ const Contact = () => {
                   />
                 </div>
                 <motion.button
+                  disabled={isSubmitting}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-2xl font-bold uppercase tracking-widest flex items-center justify-center gap-3 glow-blue transition-all"
+                  className={`w-full py-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-2xl font-bold uppercase tracking-widest flex items-center justify-center gap-3 glow-blue transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
-                  Send Message <Send size={20} />
+                  {isSubmitting ? (
+                    <>Sending... <Loader2 className="animate-spin" size={20} /></>
+                  ) : (
+                    <>Send Message <Send size={20} /></>
+                  )}
                 </motion.button>
               </form>
               

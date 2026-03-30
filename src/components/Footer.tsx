@@ -1,10 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Github, Linkedin, Instagram, Twitter, ArrowUp } from 'lucide-react';
+import { useActivity } from '../hooks/useActivity';
 
 const Footer = () => {
+  const { logActivity } = useActivity();
+  
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSocialClick = (platform: string) => {
+    logActivity('SOCIAL_LINK_CLICKED', { platform });
   };
 
   return (
@@ -46,14 +53,17 @@ const Footer = () => {
 
           <div className="flex items-center gap-6">
             {[
-              { icon: Github, href: "#" },
-              { icon: Linkedin, href: "#" },
-              { icon: Instagram, href: "#" },
-              { icon: Twitter, href: "#" }
+              { icon: Github, href: "https://github.com", label: "Github" },
+              { icon: Linkedin, href: "https://linkedin.com/in/yashpal-suthar", label: "Linkedin" },
+              { icon: Instagram, href: "https://instagram.com/yasxpal", label: "Instagram" },
+              { icon: Twitter, href: "https://twitter.com", label: "Twitter" }
             ].map((social, index) => (
               <motion.a
                 key={index}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => handleSocialClick(social.label)}
                 whileHover={{ y: -5, scale: 1.1 }}
                 className="p-3 rounded-xl glass border-white/5 hover:border-white/20 hover:bg-white/10 transition-all text-slate-400 hover:text-cyan-400"
               >

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'motion/react';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
+import { useActivity } from '../hooks/useActivity';
 
 const projects = [
   {
@@ -55,6 +56,7 @@ const projects = [
 
 const ProjectCard = ({ project, index }: { project: typeof projects[0], index: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const { logActivity } = useActivity();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -113,10 +115,18 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0], index: n
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
           <div className="flex gap-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-            <a href={project.demo} className="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform">
+            <a 
+              href={project.demo} 
+              onClick={() => logActivity('OPENED_PROJECT_DEMO', { project: project.title })}
+              className="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform"
+            >
               <ExternalLink size={20} />
             </a>
-            <a href={project.github} className="p-3 bg-white/20 text-white backdrop-blur-md rounded-full hover:scale-110 transition-transform">
+            <a 
+              href={project.github} 
+              onClick={() => logActivity('OPENED_PROJECT_GITHUB', { project: project.title })}
+              className="p-3 bg-white/20 text-white backdrop-blur-md rounded-full hover:scale-110 transition-transform"
+            >
               <Github size={20} />
             </a>
           </div>
