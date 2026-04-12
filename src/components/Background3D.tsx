@@ -1,96 +1,152 @@
-import React, { useRef, useMemo, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useRef, useMemo } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Points, PointMaterial, Float, Sphere, MeshDistortMaterial } from '@react-three/drei';
 import * as THREE from 'three';
-import { motion } from 'motion/react';
 
-function StarField() {
-  const ref = useRef<THREE.Points>(null!);
-  
+function Galaxy() {
+  const pointsRef = useRef<THREE.Points>(null!);
+  const groupRef = useRef<THREE.Group>(null!);
+  const { mouse } = useThree();
+
+  const count = 5000;
   const positions = useMemo(() => {
-    const pos = new Float32Array(2000 * 3);
-    for (let i = 0; i < 2000; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 10;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 10;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 10;
+    const pos = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    
+    const colorInside = new THREE.Color('#ff6030');
+    const colorOutside = new THREE.Color('#1b3984');
+
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+
+      // Position
+      const radius = Math.random() * 5;
+      const spinAngle = radius * 5;
+      const branchAngle = ((i % 3) * Math.PI * 2) / 3;
+
+      const randomX = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.3 * radius;
+      const randomY = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.3 * radius;
+      const randomZ = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.3 * radius;
+
+      pos[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+      pos[i3 + 1] = randomY;
+      pos[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+      // Color
+      const mixedColor = colorInside.clone();
+      mixedColor.lerp(colorOutside, radius / 5);
+      
+      colors[i3] = mixedColor.r;
+      colors[i3 + 1] = mixedColor.g;
+      colors[i3 + 2] = mixedColor.b;
     }
-    return pos;
+    return { positions: pos, colors };
   }, []);
 
   useFrame((state, delta) => {
-    ref.current.rotation.x -= delta / 10;
-    ref.current.rotation.y -= delta / 15;
+    const time = state.clock.getElapsedTime();
+    
+    // Continuous rotation
+    pointsRef.current.rotation.y += delta * 0.05;
+    
+    // Mouse interaction
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, mouse.y * 0.2, 0.1);
+    groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, -mouse.x * 0.2, 0.1);
+
+    // Twinkle effect
+    const material = pointsRef.current.material as THREE.PointsMaterial;
+    material.opacity = 0.6 + Math.sin(time * 2) * 0.2;
   });
 
   return (
-    <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
+    <group ref={groupRef}>
+      <Points ref={pointsRef} positions={positions.positions} colors={positions.colors} stride={3} frustumCulled={false}>
         <PointMaterial
           transparent
-          color="#3b82f6"
+          vertexColors
           size={0.015}
           sizeAttenuation={true}
           depthWrite={false}
+          blending={THREE.AdditiveBlending}
         />
       </Points>
     </group>
   );
 }
 
-function AnimatedSphere() {
-  const meshRef = useRef<THREE.Mesh>(null!);
+function Nebulae() {
   const groupRef = useRef<THREE.Group>(null!);
-  const [scale, setScale] = useState(0);
-  
+
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    if (meshRef.current) {
-      meshRef.current.rotation.x = time * 0.2;
-      meshRef.current.rotation.y = time * 0.3;
-    }
-    
-    // Smooth intro scale
-    if (scale < 1) {
-      setScale(prev => Math.min(prev + 0.01, 1));
-    }
-    
     if (groupRef.current) {
-      groupRef.current.scale.setScalar(scale);
+      groupRef.current.rotation.y = time * 0.02;
     }
   });
 
   return (
-    <Float speed={2} rotationIntensity={1.5} floatIntensity={2.5}>
-      <group ref={groupRef}>
-        <Sphere ref={meshRef} args={[1, 64, 64]} position={[2, 0, -2]}>
+    <group ref={groupRef}>
+      {/* Central Nebula */}
+      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
+        <Sphere args={[1.5, 32, 32]} position={[0, 0, 0]}>
           <MeshDistortMaterial
-            color="#3b82f6"
-            attach="material"
-            distort={0.5}
-            speed={3}
-            roughness={0.1}
-            metalness={0.9}
+            color="#4338ca"
+            distort={0.6}
+            speed={2}
             transparent
-            opacity={0.8 * scale}
+            opacity={0.15}
+            blending={THREE.AdditiveBlending}
           />
         </Sphere>
-      </group>
-    </Float>
+      </Float>
+
+      {/* Outer Nebula 1 */}
+      <Float speed={2} rotationIntensity={1} floatIntensity={2}>
+        <Sphere args={[2, 32, 32]} position={[2, 1, -2]}>
+          <MeshDistortMaterial
+            color="#3b82f6"
+            distort={0.4}
+            speed={1.5}
+            transparent
+            opacity={0.1}
+            blending={THREE.AdditiveBlending}
+          />
+        </Sphere>
+      </Float>
+
+      {/* Outer Nebula 2 */}
+      <Float speed={1} rotationIntensity={0.8} floatIntensity={1.5}>
+        <Sphere args={[1.8, 32, 32]} position={[-2, -1, 1]}>
+          <MeshDistortMaterial
+            color="#8b5cf6"
+            distort={0.5}
+            speed={1}
+            transparent
+            opacity={0.08}
+            blending={THREE.AdditiveBlending}
+          />
+        </Sphere>
+      </Float>
+    </group>
   );
 }
 
 function Background3D() {
   return (
     <div className="fixed inset-0 -z-10 bg-[#020617]">
-      <Canvas camera={{ position: [0, 0, 1] }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        <StarField />
-        <AnimatedSphere />
+      <Canvas camera={{ position: [0, 3, 6], fov: 60 }}>
+        <color attach="background" args={['#020617']} />
+        <ambientLight intensity={0.2} />
+        <pointLight position={[0, 0, 0]} intensity={2} color="#ff6030" />
+        <Galaxy />
+        <Nebulae />
       </Canvas>
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020617]/50 to-[#020617]" />
+      {/* Vignette and overlay */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020617_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020617]/30 to-[#020617] pointer-events-none" />
     </div>
   );
 }
 
 export default Background3D;
+

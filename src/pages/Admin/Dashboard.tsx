@@ -17,8 +17,7 @@ import {
   UserPlus,
   MessageSquare,
   CheckCircle2,
-  XCircle,
-  Bot
+  XCircle
 } from 'lucide-react';
 import { collection, query, orderBy, limit, getDocs, where, Timestamp, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
@@ -247,20 +246,6 @@ const AdminDashboard: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </div>
-            <div className="space-y-4">
-              <h4 className="text-sm font-bold uppercase tracking-widest text-slate-400">Gemini AI Configuration</h4>
-              <div className="p-4 bg-white/5 rounded-xl border border-white/5 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Bot className="text-cyan-500" size={20} />
-                  <span className="text-sm">Gemini API Key</span>
-                </div>
-                {/* We check this via a small test or just assume it's set if we can't check process.env in frontend */}
-                <span className="text-xs font-bold text-cyan-500 uppercase tracking-widest">Configured in Backend</span>
-              </div>
-              <p className="text-[10px] text-slate-500 italic">
-                Note: Gemini API key is managed securely in the backend server and is not exposed to the client.
-              </p>
             </div>
           </div>
         </motion.div>
